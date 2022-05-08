@@ -19,7 +19,7 @@ jobs:
     - name: 🧮 Set SHA
       id: shasum
       run: |
-        echo ::set-output name=sha::"$(shasum -a 256 target/release/continous-deployment-mac.tar.gz | awk '{printf $1}')"
+        echo ::set-output name=sha::"$(shasum -a 256 target/release/continuous-deployment-mac.tar.gz | awk '{printf $1}')"
 
     - name: 🐣 Create Release
       id: create_release
@@ -42,16 +42,16 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: target/release/continous-deployment-mac.tar.gz
-        asset_name: continous-deployment-mac.tar.gz
+        asset_path: target/release/continuous-deployment-mac.tar.gz
+        asset_name: continuous-deployment-mac.tar.gz
         asset_content_type: application/gzip
 
     - name: 🍺 Bump Brew
       env: 
         HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.token }}
       run: |
-        brew tap tgotwig/continous-deployment
+        brew tap tgotwig/continuous-deployment
         brew bump-formula-pr -f --version=${{ steps.get_version.outputs.version }} --no-browse --no-audit \
         --sha256=${{ steps.shasum.outputs.sha }} \
-        --url='https://github.com/tgotwig/continous-deployment/releases/download/${{ steps.get_version.outputs.version }}/continous-deployment-mac.tar.gz' \
-        tgotwig/homebrew-continous-deployment/continous-deployment
+        --url='https://github.com/tgotwig/continuous-deployment/releases/download/${{ steps.get_version.outputs.version }}/continuous-deployment-mac.tar.gz' \
+        tgotwig/homebrew-continuous-deployment/continuous-deployment

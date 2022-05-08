@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "continous-deployment"
+name = "continuous-deployment"
 version = "0.0.1"
