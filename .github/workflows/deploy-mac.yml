@@ -4,23 +4,12 @@ on:
    tags:
      - '*'
 jobs:
-  release-osx:
+  prepare:
     runs-on: macos-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
     - uses: actions/checkout@v2
-
-    - name: 🧑‍🔧 Build Release
-      run: cargo build --release && make zip-mac
-
-    - name: ⬆️ Get version
-      id: get_version
-      run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
-    
-    - name: 🧮 Set SHA
-      id: shasum
-      run: |
-        echo ::set-output name=sha::"$(shasum -a 256 target/release/continuous-deployment-mac.tar.gz | awk '{printf $1}')"
-
     - name: 🐣 Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -36,12 +25,30 @@ jobs:
         draft: false
         prerelease: false
 
+  release-osx:
+    runs-on: macos-latest
+    needs: prepare
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: 🧑‍🔧 Build Release
+      run: cargo build --release && make zip-mac
+
+    - name: ⬆️ Get version
+      id: get_version
+      run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
+    
+    - name: 🧮 Set SHA
+      id: shasum
+      run: |
+        echo ::set-output name=sha::"$(shasum -a 256 target/release/continuous-deployment-mac.tar.gz | awk '{printf $1}')"
+
     - name: 🚀 Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.token }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        upload_url: ${{ needs.prepare.outputs.upload_url }}
         asset_path: target/release/continuous-deployment-mac.tar.gz
         asset_name: continuous-deployment-mac.tar.gz
         asset_content_type: application/gzip
