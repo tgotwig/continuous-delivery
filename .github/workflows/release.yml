@@ -43,7 +43,7 @@ jobs:
     - name: 🧮 Set SHA
       id: shasum
       run: |
-        echo ::set-output name=sha::"$(shasum -a 256 target/release/continuous-deployment-mac.tar.gz | awk '{printf $1}')"
+        echo ::set-output name=sha::"$(shasum -a 256 target/release/continuous-delivery-mac.tar.gz | awk '{printf $1}')"
 
     - name: 🚀 Upload Release Asset
       uses: actions/upload-release-asset@v1
@@ -51,19 +51,19 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.token }}
       with:
         upload_url: ${{ needs.prepare.outputs.upload_url }}
-        asset_path: target/release/continuous-deployment-mac.tar.gz
-        asset_name: continuous-deployment-mac.tar.gz
+        asset_path: target/release/continuous-delivery-mac.tar.gz
+        asset_name: continuous-delivery-mac.tar.gz
         asset_content_type: application/gzip
 
     - name: 🍺 Bump Brew
       env: 
         HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.token }}
       run: |
-        brew tap tgotwig/homebrew-continuous-deployment
+        brew tap tgotwig/homebrew-continuous-delivery
         brew bump-formula-pr -f --version=${{ steps.get_version.outputs.version }} --no-browse --no-audit \
         --sha256=${{ steps.shasum.outputs.sha }} \
-        --url='https://github.com/tgotwig/continuous-deployment/releases/download/${{ steps.get_version.outputs.version }}/continuous-deployment-mac.tar.gz' \
-        tgotwig/homebrew-continuous-deployment/continuous-deployment
+        --url='https://github.com/tgotwig/continuous-delivery/releases/download/${{ steps.get_version.outputs.version }}/continuous-delivery-mac.tar.gz' \
+        tgotwig/homebrew-continuous-delivery/continuous-delivery
 
   release-linux:
     name: 🐧 Release on Linux
@@ -82,7 +82,7 @@ jobs:
     - name: 🧮 Set SHA
       id: shasum
       run: |
-        echo ::set-output name=sha::"$(shasum -a 256 target/release/continuous-deployment-linux.tar.gz | awk '{printf $1}')"
+        echo ::set-output name=sha::"$(shasum -a 256 target/release/continuous-delivery-linux.tar.gz | awk '{printf $1}')"
 
     - name: 🚀 Upload Release Asset
       uses: actions/upload-release-asset@v1
@@ -90,8 +90,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.token }}
       with:
         upload_url: ${{ needs.prepare.outputs.upload_url }}
-        asset_path: target/release/continuous-deployment-linux.tar.gz
-        asset_name: continuous-deployment-linux.tar.gz
+        asset_path: target/release/continuous-delivery-linux.tar.gz
+        asset_name: continuous-delivery-linux.tar.gz
         asset_content_type: application/gzip
 
     - name: 🏝 Set git config
@@ -103,8 +103,8 @@ jobs:
       env: 
         HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.token }}
       run: |
-        brew tap tgotwig/homebrew-linux-continuous-deployment
+        brew tap tgotwig/homebrew-linux-continuous-delivery
         brew bump-formula-pr -f --version=${{ steps.get_version.outputs.version }} --no-browse --no-audit \
         --sha256=${{ steps.shasum.outputs.sha }} \
-        --url='https://github.com/tgotwig/continuous-deployment/releases/download/${{ steps.get_version.outputs.version }}/continuous-deployment-linux.tar.gz' \
-        tgotwig/homebrew-linux-continuous-deployment/continuous-deployment
+        --url='https://github.com/tgotwig/continuous-delivery/releases/download/${{ steps.get_version.outputs.version }}/continuous-delivery-linux.tar.gz' \
+        tgotwig/homebrew-linux-continuous-delivery/continuous-delivery
