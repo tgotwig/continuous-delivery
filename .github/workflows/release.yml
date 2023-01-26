@@ -102,8 +102,9 @@ jobs:
       - name: Install Linuxbrew
         run: |
           bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" < /dev/null
-          echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/runner/.bash_profile
-          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+          source ~/.bashrc
+          ls /home/linuxbrew/.linuxbrew/bin
 
       - name: 🍺 Bump Brew
         env:
