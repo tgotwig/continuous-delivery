@@ -23,7 +23,7 @@ jobs:
             Changes in this Release
             - First Change
             - Second Change
-          draft: false
+          draft: true
           prerelease: false
 
   release-osx:
@@ -100,7 +100,7 @@ jobs:
           git config --global user.name "Thomas Gotwig"
 
       - name: Install Linuxbrew
-        run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+        run: bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" < /dev/null
 
       - name: 🍺 Bump Brew
         env:
