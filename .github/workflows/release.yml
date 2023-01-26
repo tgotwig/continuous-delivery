@@ -102,16 +102,13 @@ jobs:
       - name: Install Linuxbrew
         run: |
           bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" < /dev/null
-          export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-          source ~/.bashrc
-          ls /home/linuxbrew/.linuxbrew/bin
 
       - name: 🍺 Bump Brew
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.TOKEN }}
         run: |
-          brew tap tgotwig/homebrew-linux-continuous-delivery
-          brew bump-formula-pr -f --version=${{ steps.get_version.outputs.version }} --no-browse --no-audit \
+          /home/linuxbrew/.linuxbrew/bin/brew tap tgotwig/homebrew-linux-continuous-delivery
+          /home/linuxbrew/.linuxbrew/bin/brew bump-formula-pr -f --version=${{ steps.get_version.outputs.version }} --no-browse --no-audit \
           --sha256=${{ steps.shasum.outputs.sha }} \
           --url='https://github.com/tgotwig/continuous-delivery/releases/download/${{ steps.get_version.outputs.version }}/continuous-delivery-linux.tar.gz' \
           tgotwig/homebrew-linux-continuous-delivery/continuous-delivery
