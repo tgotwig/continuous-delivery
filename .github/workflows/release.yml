@@ -99,6 +99,9 @@ jobs:
           git config --global user.email "github@tomasu.mozmail.com"
           git config --global user.name "Thomas Gotwig"
 
+      - name: Install Linuxbrew
+        run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
       - name: 🍺 Bump Brew
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.TOKEN }}
