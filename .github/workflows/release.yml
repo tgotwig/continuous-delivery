@@ -100,7 +100,9 @@ jobs:
           git config --global user.name "Thomas Gotwig"
 
       - name: Install Linuxbrew
-        run: bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" < /dev/null
+        run: |
+          bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" < /dev/null
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
       - name: 🍺 Bump Brew
         env:
